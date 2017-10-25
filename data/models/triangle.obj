@@ -1,0 +1,11 @@
+# Blender v2.79 (sub 0) OBJ File: ''
+# www.blender.org
+mtllib triangle.mtl
+o Plane
+v 0.998528 0.314816 0.601621
+v -1.001472 0.314816 0.601621
+v -0.001472 0.314816 -0.998379
+vn 0.0000 1.0000 -0.0000
+usemtl None
+s off
+f 1//1 3//1 2//1
