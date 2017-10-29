@@ -31,12 +31,10 @@
 #define VERTEX_BUFFER_BIND_ID 0
 #define ENABLE_VALIDATION false
 
-unsigned int count = 0;
 unsigned int number_objects = 50;
 unsigned int nt = 0;
 unsigned int index_mesh = 0;
 float scale = 0.0;
-auto ex = "models/TUNA.obj";
 char ar_models[6][30] = {"models/deer.obj", "models/M4A1.obj", "models/MAMMOTH.obj", "models/paper cup.obj", "models/TUNA.obj", "models/Wolf.obj"};
 
 class VulkanExample : public VulkanExampleBase
