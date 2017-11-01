@@ -49,7 +49,6 @@ public:
 
 	struct {
 		vks::Model ufo;
-		vks::Model skysphere;
 	} models;
 
 	struct {
@@ -120,7 +119,6 @@ public:
 
 	// Max. dimension of the ufo mesh for use as the sphere
 	// radius for frustum culling
-	float objectSphereDim;
 
 	// View frustum for culling invisible objects
 	vks::Frustum frustum;
@@ -171,7 +169,6 @@ public:
 		// Clean up used Vulkan resources 
 		// Note : Inherited destructor cleans up resources stored in base class
 		vkDestroyPipeline(device, pipelines.phong, nullptr);
-		vkDestroyPipeline(device, pipelines.starsphere, nullptr);
 
 		vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
 
@@ -179,7 +176,6 @@ public:
 		vkFreeCommandBuffers(device, cmdPool, 1, &secondaryCommandBuffer);
 
 		models.ufo.destroy();
-		models.skysphere.destroy();
 
 		for (auto& thread : threadData)
 		{
@@ -272,7 +268,6 @@ public:
 		ObjectData *objectData = &thread->objectData[cmdBufferIndex];
 
 		// Check visibility against view frustum
-		objectData->visible = frustum.checkSphere(objectData->pos, objectSphereDim * 0.5f); 
 
 		if (!objectData->visible)
 		{
@@ -365,9 +360,6 @@ public:
 			&mvp);
 
 		VkDeviceSize offsets[1] = { 0 };
-		vkCmdBindVertexBuffers(secondaryCommandBuffer, 0, 1, &models.skysphere.vertices.buffer, offsets);
-		vkCmdBindIndexBuffer(secondaryCommandBuffer, models.skysphere.indices.buffer, 0, VK_INDEX_TYPE_UINT32);
-		vkCmdDrawIndexed(secondaryCommandBuffer, models.skysphere.indexCount, 1, 0, 0, 0);
 
 		VK_CHECK_RESULT(vkEndCommandBuffer(secondaryCommandBuffer));
 	}
@@ -451,8 +443,6 @@ public:
 	{
 		//models.ufo.loadFromFile(getAssetPath() + "models/retroufo_red_lowpoly.dae", vertexLayout, 0.12f, vulkanDevice, queue);
 		models.ufo.loadFromFile(getAssetPath() + ar_models[index_mesh], vertexLayout, scale, vulkanDevice, queue);
-		models.skysphere.loadFromFile(getAssetPath() + "models/sphere.obj", vertexLayout, 0.5f, vulkanDevice, queue);
-		objectSphereDim = std::max(0,0);
 	}
 
 	void setupVertexDescriptions()
@@ -594,8 +584,6 @@ public:
 		// Star sphere rendering pipeline
 		rasterizationState.cullMode = VK_CULL_MODE_FRONT_BIT;
 		depthStencilState.depthWriteEnable = VK_FALSE;
-		shaderStages[0] = loadShader(getAssetPath() + "shaders/multithreading/starsphere.vert.spv", VK_SHADER_STAGE_VERTEX_BIT);
-		shaderStages[1] = loadShader(getAssetPath() + "shaders/multithreading/starsphere.frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
 		VK_CHECK_RESULT(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCreateInfo, nullptr, &pipelines.starsphere));
 	}
 
