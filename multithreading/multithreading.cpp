@@ -34,8 +34,8 @@
 unsigned int number_objects = 50;
 unsigned int nt = 0;
 unsigned int index_mesh = 0;
-float scale = 0.0;
-char ar_models[6][30] = {"models/deer.obj", "models/M4A1.obj", "models/MAMMOTH.obj", "models/paper cup.obj", "models/TUNA.obj", "models/Wolf.obj"};
+float scale = 0.0; 
+char ar_models[7][30] = {"models/triangle.obj", "models/paper cup.obj", "models/deer.obj", "models/MAMMOTH.obj", "models/Wolf.obj", "models/TUNA.obj", "models/M4A1.obj"};
 
 class VulkanExample : public VulkanExampleBase
 {
@@ -127,7 +127,8 @@ public:
 	{
 		//printf("size args %i\n", (int)this->args.size());
         if( args.size() != 5 ){
-            printf("run as ./multithreading N nt mesh scale\n");
+            printf("run as ./multithreading N(number of ojects) NT(number of threads) mesh(mesh used) scale(scale of the mesh)\n");
+            printf("mesh : 1-Triangle 2-Paper Cup 3-Deer 4-Mammoth 5-Wolf 6-Tuna 7-M4A1)\n");
             exit(EXIT_FAILURE);
         }
         int number_objects = atoi(args[1]);
