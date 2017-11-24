@@ -35,7 +35,7 @@ unsigned int number_objects = 50;
 unsigned int nt = 0;
 unsigned int index_mesh = 0;
 float scale = 0.0; 
-char ar_models[7][30] = {"models/triangle.obj", "models/paper cup.obj", "models/deer.obj", "models/MAMMOTH.obj", "models/Wolf.obj", "models/TUNA.obj", "models/M4A1.obj"};
+char ar_models[8][64] = {"models/triangle.obj", "models/paper cup.obj", "models/deer2.obj", "models/MAMMOTH.obj", "models/Wolf.obj", "models/TUNA.obj", "models/retroufo_red_lowpoly.dae", "models/suzanne.obj"};
 
 class VulkanExample : public VulkanExampleBase
 {
@@ -65,7 +65,7 @@ public:
 
 	struct {
 		VkPipeline phong;
-		VkPipeline starsphere;
+		//VkPipeline starsphere;
 	} pipelines;
 
 	VkPipelineLayout pipelineLayout;
@@ -207,8 +207,8 @@ public:
 		VK_CHECK_RESULT(vkAllocateCommandBuffers(device, &cmdBufAllocateInfo, &primaryCommandBuffer));
 
 		// Create a secondary command buffer for rendering the star sphere
-		cmdBufAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
-		VK_CHECK_RESULT(vkAllocateCommandBuffers(device, &cmdBufAllocateInfo, &secondaryCommandBuffer));
+		//cmdBufAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
+		//VK_CHECK_RESULT(vkAllocateCommandBuffers(device, &cmdBufAllocateInfo, &secondaryCommandBuffer));
 		
 		threadData.resize(numThreads);
 
@@ -269,9 +269,7 @@ public:
 		ObjectData *objectData = &thread->objectData[cmdBufferIndex];
 
 		// Check visibility against view frustum
-
-		if (!objectData->visible)
-		{
+		if (!objectData->visible) {
 			return;
 		}
 
@@ -343,7 +341,7 @@ public:
 		VkRect2D scissor = vks::initializers::rect2D(width, height, 0, 0);
 		vkCmdSetScissor(secondaryCommandBuffer, 0, 1, &scissor);
 
-		vkCmdBindPipeline(secondaryCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines.starsphere);
+		//vkCmdBindPipeline(secondaryCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines.starsphere);
 
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::rotate(view, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -375,7 +373,7 @@ public:
 
 		VkClearValue clearValues[2];
 		clearValues[0].color = defaultClearColor;
-		clearValues[0].color = { {0.5f, 0.5f, 0.2f, 1.0f} };
+		clearValues[0].color = { {1.0f, 0.5f, 0.5f, 1.0f} };
 		clearValues[1].depthStencil = { 1.0f, 0 };
 
 		VkRenderPassBeginInfo renderPassBeginInfo = vks::initializers::renderPassBeginInfo();
@@ -406,8 +404,8 @@ public:
 		std::vector<VkCommandBuffer> commandBuffers;
 
 		// Secondary command buffer with star background sphere
-		updateSecondaryCommandBuffer(inheritanceInfo);
-		commandBuffers.push_back(secondaryCommandBuffer);
+		//updateSecondaryCommandBuffer(inheritanceInfo);
+		//commandBuffers.push_back(secondaryCommandBuffer);
 
 		// Add a job to the thread's queue for each object to be rendered
 		for (uint32_t t = 0; t < numThreads; t++)
@@ -583,9 +581,9 @@ public:
 		VK_CHECK_RESULT(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCreateInfo, nullptr, &pipelines.phong));
 
 		// Star sphere rendering pipeline
-		rasterizationState.cullMode = VK_CULL_MODE_FRONT_BIT;
-		depthStencilState.depthWriteEnable = VK_FALSE;
-		VK_CHECK_RESULT(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCreateInfo, nullptr, &pipelines.starsphere));
+		//rasterizationState.cullMode = VK_CULL_MODE_FRONT_BIT;
+		//depthStencilState.depthWriteEnable = VK_FALSE;
+		//VK_CHECK_RESULT(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCreateInfo, nullptr, &pipelines.starsphere));
 	}
 
 	void updateMatrices()

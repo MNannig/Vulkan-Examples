@@ -35,8 +35,11 @@ void main()
 	
     vec4 pos = pushConsts.mvp * vec4(inPos, 1.0);
     outNormal = mat3(pushConsts.mvp) * inNormal;
-//	vec3 lPos = ubo.lightPos.xyz;
-vec3 lPos = vec3(0.0);
+    //vec3 lPos = ubo.lightPos.xyz;
+    vec3 lPos = vec3(0.0);
     outLightVec = lPos - pos.xyz;
     outViewVec = -pos.xyz;
+    outNormal = inNormal;
+    outViewVec = -(pushConsts.mvp * vec4(inPos, 1.0)).xyz;
+
 }
